@@ -1,0 +1,73 @@
+# ===================================================================
+#      isCORAL v6.1.0 Complete Analysis - Configuration File (Storage-Optimized Version)
+# ===================================================================
+# This configuration file is strictly aligned with the core code of isCORAL v6.1.0 (Raw / High Sensitivity Edition).
+
+# --- 1. Path and Version Management ---
+paths:
+  # Input raw Seurat object file (.RData or .rds)
+  input_seurat_object: "./1_data/embryo/Epi_AM_subset_new.RData"
+  
+  # Core computational middleware/cache directory (High-speed SSD path recommended)
+  ssd_temp_root: "./.iscoral_cache"
+  
+  # Final output path (Location for lightweight result files)
+  hdd_final_root: "./3_results_new"
+  
+  # [v6.1.0 Update] Base name for output files (Strongly recommended to use .rds, as only result objects are saved now)
+  final_rdata_filename: "auto"
+
+run_settings:
+  # Critical: Specify the folder name of the loaded R package version
+  package_version: "isCORAL_v6.1.1"
+  
+  # If there are multiple objects in the input file, specify the object name to load; if only one, leave blank (null)
+  input_obj_name: null 
+  
+  # Global random seed (Controls downsampling and clustering randomness)
+  master_seed: 20251009
+
+  # Whether to automatically add a timestamp suffix to output files (true/false)
+  add_timestamp_to_output: true
+
+
+# ===================================================================
+# --- 2. isCORAL v6.1.0 Core Parameters ---
+# ===================================================================
+iscoral_params:
+  # --- 3.1 Core Input and Species ---
+  species: "human"
+  assay: "RNA"
+
+  # --- 3.2 Data Preprocessing ---
+  downsampleUMI: null
+  max_cells: null
+  genes_to_remove: null
+
+  # --- 3.4 Core Algorithm Control ---
+  bin_size: 30
+  n_repeats: 100
+
+
+  # --- 3.5 Performance and Resource Management ---
+  parallel_cores: 20
+  # [Restored] Number of cells to downsample for quick NMF evaluation, speeds up large-scale data (null means no downsampling)
+  nmf_eval_downsample_cells: null
+
+  # --- 3.6 [Advanced] Feature Extraction and Internal Clustering Parameters ---
+  gemli_mean_q1: 0.98
+  gemli_mean_q2: 0.90
+  gemli_fano_q2: 0.40
+  gemli_mean_q3: 0.60
+  gemli_fano_q3: 0.90
+  gene_min_mean_for_ranking: 0.05
+  
+  # NMF Parameters (Note: v6.1.0 internally forces L1=0, L2=0 with no regularization to improve sensitivity)
+  nmf_nrun: 1
+  nmf_feature_number: 5
+  nmf_k_value: 50
+  downsample_gemli_ratio: 1
+  nmf_feature_selection_ratio: 0.2
+  
+  # Clustering Parameters
+  specc_kernel: "laplacedot" # Optional: rbfdot, vanilladot, laplacedot, etc.
